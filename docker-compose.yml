@@ -1,0 +1,19 @@
+version: "3"
+services:
+  logstash:
+    image: solr-logstash:latest
+    build: ./solr-logstash
+    links:
+       - solr:solr
+    volumes:
+      - "/home/stefan/mounts/solr-logstash/pipeline:/usr/share/logstash/pipeline/"
+      - "/home/stefan/mounts/logstash-import:/data"
+  solr:
+    image: solr-banana:latest
+    build: ./solr-banana
+    ports:
+      - "8983:8983"
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - logstash
